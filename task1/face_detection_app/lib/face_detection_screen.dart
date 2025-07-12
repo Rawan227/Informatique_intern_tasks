@@ -115,8 +115,6 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
     _isDetecting = true;
 
     try {
-      print('--------------------------------------------');
-      print(image);
       final inputImage = _inputImageFromCameraImage(image);
       final faces = await _faceDetector.processImage(inputImage);
       setState(() {
@@ -143,7 +141,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
           //number of people in the
           Text('Faces detected: ${_faces.length}'),
           //text what a pretty face when smiling
-          _isDetecting ? Text('what a pretty face 😍') : SizedBox(),
+          _faces.isNotEmpty ? Text('what a pretty face 😍') : SizedBox(),
         ],
       ),
     );
