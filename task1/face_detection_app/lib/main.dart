@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'face_detection_screen.dart';
+import 'screens/face_detection_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
