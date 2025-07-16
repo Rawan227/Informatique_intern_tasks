@@ -2,25 +2,38 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:native_device_orientation/native_device_orientation.dart';
 
 class ImageConverter {
-  static final _orientations = {
-    DeviceOrientation.portraitUp: 0,
-    DeviceOrientation.landscapeLeft: 90,
-    DeviceOrientation.portraitDown: 180,
-    DeviceOrientation.landscapeRight: 270,
-  };
 
-  static InputImage? toInputImage(
+  static Future<int> getDeviceOrientation() async {
+    final orientation = await NativeDeviceOrientationCommunicator().orientation(
+      useSensor: true,
+    );
+
+    switch (orientation) {
+      case NativeDeviceOrientation.portraitUp:
+        return 0;
+      case NativeDeviceOrientation.portraitDown:
+        return 180;
+      case NativeDeviceOrientation.landscapeLeft:
+        return 90;
+      case NativeDeviceOrientation.landscapeRight:
+        return 270;
+      default:
+        return 0;
+    }
+  }
+
+  static Future<InputImage?> toInputImage(
     CameraImage image,
     CameraDescription camera,
-    DeviceOrientation orientation,
-  ) {
+  ) async {
     final sensorOrientation = camera.sensorOrientation;
-
+    int orientation = await getDeviceOrientation();
     int? rotationValue;
     if (Platform.isAndroid) {
-      int? rotationCompensation = _orientations[orientation];
+      int? rotationCompensation = orientation;
       if (rotationCompensation == null) return null;
       if (camera.lensDirection == CameraLensDirection.front) {
         rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
