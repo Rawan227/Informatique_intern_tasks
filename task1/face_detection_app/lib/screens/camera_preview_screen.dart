@@ -146,28 +146,28 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: (_cameraController != null && _isCameraInitialized)
                 ? Stack(
+                    fit: StackFit.expand,
                     children: [
-                      CameraPreview(_cameraController!),
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: FacePainter(
-                            faces: _faces,
-                            imageSize: _cameraController!.value.previewSize!,
-                            isFrontCamera:
-                                _camera.lensDirection ==
-                                CameraLensDirection.front,
-                          ),
+                      CameraPreview(
+                        _cameraController!,
+                        child: FacePaintWidget(
+                          faces: _faces,
+                          imageSize: _cameraController!.value.previewSize!,
+                          isFrontCamera:
+                              _camera.lensDirection ==
+                              CameraLensDirection.front,
                         ),
                       ),
                     ],
                   )
                 : const Center(child: CircularProgressIndicator()),
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 10),
           Center(
             child: Text(
               'Faces detected: ${_faces.length}',

@@ -34,6 +34,7 @@ class ImageConverter {
     int? rotationValue;
     if (Platform.isAndroid) {
       int? rotationCompensation = orientation;
+      if (rotationCompensation == null) return null;
       if (camera.lensDirection == CameraLensDirection.front) {
         rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
       } else {
